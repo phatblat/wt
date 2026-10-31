@@ -2,7 +2,7 @@
 
 [package]
 name = "wt"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 description = "Git worktree resolver for the ~/.worktrees/<path-key>/<branch> convention."
 license = "MIT"
