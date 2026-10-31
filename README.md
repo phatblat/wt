@@ -5,7 +5,7 @@ Git worktree resolver for the `~/.worktrees/<path-key>/<branch>` convention: it 
 ## Install
 
 - Install with [mise](https://mise.jdx.dev): `mise use -g github:phatblat/wt`.
-- Or download `wt-<version>-<target>.tar.gz` (`aarch64-apple-darwin` or `x86_64-unknown-linux-gnu`) from https://github.com/phatblat/wt/releases, check it against `SHA256SUMS`, and put `wt` on `PATH`.
+- Or download `wt-<version>-<target>.tar.gz` (`aarch64-apple-darwin`, `aarch64-unknown-linux-gnu`, or `x86_64-unknown-linux-gnu`) from https://github.com/phatblat/wt/releases, check it against `SHA256SUMS`, and put `wt` on `PATH`.
 - Or build from source: `cargo install --git https://github.com/phatblat/wt --locked`.
 
 ## Usage
@@ -92,7 +92,7 @@ Run `just deps` to install the pinned toolchain, then `just check`, which runs `
 
 ## Releasing
 
-Set `version` in `Cargo.toml`, run `cargo update --workspace`, commit, then push tag `v<version>`. The release workflow builds both targets and publishes `wt-<version>-<target>.tar.gz` and `SHA256SUMS`.
+Set `version` in `Cargo.toml`, run `cargo update --workspace`, commit, then push tag `v<version>`. The release workflow builds every target and publishes `wt-<version>-<target>.tar.gz` and `SHA256SUMS`.
 
 ## License
 
