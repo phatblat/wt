@@ -152,4 +152,19 @@ fn main() -> ExitCode {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::USAGE;
+
+    /// The README keeps a copy of the usage text; pin the two together so a
+    /// flag added to one and forgotten in the other fails the build.
+    #[test]
+    fn usage_text_matches_the_readme() {
+        let readme = include_str!("../README.md");
+        let start = readme.find("```text\n").expect("README usage block") + "```text\n".len();
+        let end = readme[start..].find("```").expect("README usage block end") + start;
+        assert_eq!(readme[start..end].trim_end(), USAGE.trim_end());
+    }
+}
+
 
