@@ -25,6 +25,7 @@ flags, accepted in any position:
   --force             remove: pass --force to `git worktree remove`
   --cd-file <path>    switch: also write the resolved directory to <path>
   -h, --help          print this text
+  -V, --version       print the version
 
 With no action and no branch, wt runs an fzf picker over the repo's worktrees.
 The first positional is an action only when it is exactly one of the nine verbs
@@ -67,6 +68,10 @@ fn parse_args(raw: &[String]) -> Result<Args, ExitCode> {
         match arg.as_str() {
             "-h" | "--help" => {
                 print!("{USAGE}");
+                return Err(ExitCode::SUCCESS);
+            }
+            "-V" | "--version" => {
+                println!("wt {}", env!("CARGO_PKG_VERSION"));
                 return Err(ExitCode::SUCCESS);
             }
             "--allow-home" => allow_home = true,
