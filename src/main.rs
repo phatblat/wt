@@ -25,6 +25,7 @@ flags, accepted in any position:
   --force             remove: pass --force to `git worktree remove`
   --cd-file <path>    switch: also write the resolved directory to <path>
   -h, --help          print this text
+  -V, --version       print the version
 
 With no action and no branch, wt runs an fzf picker over the repo's worktrees.
 The first positional is an action only when it is exactly one of the nine verbs
@@ -69,18 +70,22 @@ fn parse_args(raw: &[String]) -> Result<Args, ExitCode> {
                 print!("{USAGE}");
                 return Err(ExitCode::SUCCESS);
             }
+            "-V" | "--version" => {
+                println!("{} {}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
+                return Err(ExitCode::SUCCESS);
+            }
             "--allow-home" => allow_home = true,
             "--force" => force = true,
             "--repo" => {
-                let Some(v) = raw.get(i + 1) else {
-                    return Err(usage_error(None));
+                let Some(v) = raw.get(i + 1).filter(|v| !v.starts_with('-')) else {
+                    return Err(usage_error(Some("wt: --repo needs a directory")));
                 };
                 repo = Some(PathBuf::from(v));
                 i += 1;
             }
             "--cd-file" => {
-                let Some(v) = raw.get(i + 1) else {
-                    return Err(usage_error(None));
+                let Some(v) = raw.get(i + 1).filter(|v| !v.starts_with('-')) else {
+                    return Err(usage_error(Some("wt: --cd-file needs a path")));
                 };
                 cd_file = Some(PathBuf::from(v));
                 i += 1;
@@ -146,3 +151,20 @@ fn main() -> ExitCode {
         Err(code) => ExitCode::from(code as u8),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::USAGE;
+
+    /// The README keeps a copy of the usage text; pin the two together so a
+    /// flag added to one and forgotten in the other fails the build.
+    #[test]
+    fn usage_text_matches_the_readme() {
+        let readme = include_str!("../README.md");
+        let start = readme.find("```text\n").expect("README usage block") + "```text\n".len();
+        let end = readme[start..].find("```").expect("README usage block end") + start;
+        assert_eq!(readme[start..end].trim_end(), USAGE.trim_end());
+    }
+}
+
+
