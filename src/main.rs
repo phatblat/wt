@@ -71,7 +71,7 @@ fn parse_args(raw: &[String]) -> Result<Args, ExitCode> {
                 return Err(ExitCode::SUCCESS);
             }
             "-V" | "--version" => {
-                println!("wt {}", env!("CARGO_PKG_VERSION"));
+                println!("{} {}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
                 return Err(ExitCode::SUCCESS);
             }
             "--allow-home" => allow_home = true,
