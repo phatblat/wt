@@ -77,15 +77,15 @@ fn parse_args(raw: &[String]) -> Result<Args, ExitCode> {
             "--allow-home" => allow_home = true,
             "--force" => force = true,
             "--repo" => {
-                let Some(v) = raw.get(i + 1) else {
-                    return Err(usage_error(None));
+                let Some(v) = raw.get(i + 1).filter(|v| !v.starts_with('-')) else {
+                    return Err(usage_error(Some("wt: --repo needs a directory")));
                 };
                 repo = Some(PathBuf::from(v));
                 i += 1;
             }
             "--cd-file" => {
-                let Some(v) = raw.get(i + 1) else {
-                    return Err(usage_error(None));
+                let Some(v) = raw.get(i + 1).filter(|v| !v.starts_with('-')) else {
+                    return Err(usage_error(Some("wt: --cd-file needs a path")));
                 };
                 cd_file = Some(PathBuf::from(v));
                 i += 1;
@@ -151,3 +151,5 @@ fn main() -> ExitCode {
         Err(code) => ExitCode::from(code as u8),
     }
 }
+
+
